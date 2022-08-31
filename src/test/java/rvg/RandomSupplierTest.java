@@ -44,16 +44,16 @@ final class RandomSupplierTest {
     @Test
     void _5_multiple_constructor_args() {
         val supplier = supplierOfRandomLast(
-                path(new TypeToken<WithMultipleConstructorArgs<Integer>>() { }),
+                path(new TypeToken<WithConstructorMultipleArgs<Integer>>() { }),
                 Config.empty());
-        val value = (WithMultipleConstructorArgs<Integer>) supplier.get();
+        val value = (WithConstructorMultipleArgs<Integer>) supplier.get();
 
         assertThat(value.i).isNotZero();
         assertThat(value.t).isNotZero();
     }
 
     @Value
-    static class WithMultipleConstructorArgs<T> {
+    static class WithConstructorMultipleArgs<T> {
         int i;
         T t;
     }

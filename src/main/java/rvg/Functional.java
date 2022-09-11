@@ -6,27 +6,17 @@ import lombok.experimental.UtilityClass;
 import lombok.val;
 
 import java.lang.reflect.Constructor;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static helpers.java.ListHelpers.*;
-import static helpers.java.MapHelpers.map;
-import static helpers.java.MapHelpers.tryToGet;
-import static helpers.java.OptionalHelpers.firstNonEmpty;
+import static helpers.java.ListHelpers.append;
+import static helpers.java.ListHelpers.last;
+import static helpers.java.ListHelpers.list;
 
 @SuppressWarnings("rawtypes")
 @UtilityClass
 final class Functional {
-    static final Supplier<Integer> RANDOM_INT = Operational::randomInt;
-    static final Supplier<String> RANDOM_STRING = Operational::randomString;
-    private static final Map<Class<?>, Supplier<?>> BASIC_TYPE_TO_SUPPLIER = map(
-            int.class, RANDOM_INT,
-            Integer.class, RANDOM_INT,
-            String.class, RANDOM_STRING);
-
     static ImmutableList<TypeToken<?>> args(TypeToken<?> enclosingType, Constructor<?> c) {
         ensureNotLocalClass(enclosingType);
 
@@ -39,7 +29,7 @@ final class Functional {
 
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type, Config config) {
         //noinspection unchecked
-        return (Supplier<T>) supplierOfRandomLastInPath(path(type), config);
+        return (Supplier<T>) supplierOfRandomLastInPath(path(type), withDefaults(config));
     }
 
     private static Constructor<?> constructor(TypeToken<?> tt) {
@@ -54,10 +44,6 @@ final class Functional {
         if (enclosingType.getRawType().isLocalClass()) {
             throw new UnsupportedOperationException("Local classes are not supported");
         }
-    }
-
-    private static Optional<Supplier<?>> optSupplierIfBasicType(List<TypeToken<?>> path) {
-        return tryToGet(BASIC_TYPE_TO_SUPPLIER, last(path).getRawType());
     }
 
     private static Optional<Supplier<?>> optSupplierUsingOverrides(
@@ -75,9 +61,7 @@ final class Functional {
 
     private static Supplier<?> supplierOfRandomLastInPath(
             ImmutableList<TypeToken<?>> path, Config config) {
-        return firstNonEmpty(
-                optSupplierUsingOverrides(path, config),
-                () -> optSupplierIfBasicType(path))
+        return optSupplierUsingOverrides(path, config)
                 .orElseGet(() -> supplierUsingConstructor(path, config));
     }
 
@@ -99,5 +83,12 @@ final class Functional {
                 throw new RuntimeException(e);
             }
         };
+    }
+
+    private static Config withDefaults(Config orig) {
+        return Config.builder()
+                .add(Config.DEFAULT)
+                .add(orig)
+                .build();
     }
 }

@@ -8,16 +8,16 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rvg.Functional.*;
+import static rvg.Functional.supplierOfRandom;
 import static rvg.Operational.randomBoolean;
 
 final class SupplierOfRandomTest {
     @Test
     void _1_basic_type() {
-        assertThat(supplierOfRandom(new TypeToken<Integer>() { }, Config.empty()))
-                .isEqualTo(RANDOM_INT);
-        assertThat(supplierOfRandom(new TypeToken<String>() { }, Config.empty()))
-                .isEqualTo(RANDOM_STRING);
+        assertThat(supplierOfRandom(new TypeToken<Integer>() { }, Config.empty()).get())
+                .isNotZero();
+        assertThat(supplierOfRandom(new TypeToken<String>() { }, Config.empty()).get())
+                .isNotNull();
     }
 
     @Test
@@ -93,7 +93,7 @@ final class SupplierOfRandomTest {
                     .get();
 
             value.apply(i -> assertThat(i).isNotZero(),
-                        s -> assertThat(s).isNotEmpty());
+                        s -> assertThat(s).isNotNull());
         }
 
         @Test
@@ -103,7 +103,7 @@ final class SupplierOfRandomTest {
                     .get();
 
             value.t.apply(i -> assertThat(i).isNotZero(),
-                          s -> assertThat(s).isNotEmpty());
+                          s -> assertThat(s).isNotNull());
         }
     }
 }

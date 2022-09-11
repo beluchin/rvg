@@ -12,9 +12,16 @@ import java.util.function.Predicate;
 
 import static helpers.java.ListHelpers.list;
 import static helpers.java.tuple.Tuple.tuple;
+import static rvg.Operational.randomInt;
+import static rvg.Operational.randomString;
 
 @Value
 public class Config {
+    static final Config DEFAULT = Config.builder()
+            .for_(int.class, (tt, config) -> randomInt())
+            .for_(Integer.class, (tt, config) -> randomInt())
+            .for_(String.class, (tt, config) -> randomString())
+            .build();
     public ImmutableList<Tuple<
             Predicate<TypeToken<?>>,
             BiFunction<TypeToken<?>, Config, ?>>> many_PredicateAndRandomFunction;
@@ -31,8 +38,17 @@ public class Config {
                 BiFunction<TypeToken<?>, Config, ?>>> predicateAndRandomFunction
                 = new ArrayList<>();
 
+        public <E> Builder add(Config c) {
+            predicateAndRandomFunction.addAll(c.many_PredicateAndRandomFunction);
+            return this;
+        }
+
         public Config build() {
             return new Config(ImmutableList.copyOf(predicateAndRandomFunction));
+        }
+
+        public Builder for_(Class<?> c, BiFunction<TypeToken<?>, Config, ?> randomFunction) {
+            return for_(tt -> tt.getRawType().equals(c), randomFunction);
         }
 
         public Builder for_(Predicate<TypeToken<?>> predicate,

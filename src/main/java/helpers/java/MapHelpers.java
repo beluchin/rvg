@@ -18,6 +18,13 @@ public final class MapHelpers {
         return ImmutableMap.of(key1, value1, key2, value2);
     }
 
+    public static <K, V> ImmutableMap<K, V> map(
+            K key1, V value1,
+            K key2, V value2,
+            K key3, V value3) {
+        return ImmutableMap.of(key1, value1, key2, value2, key3, value3);
+    }
+
     public static <K, V> Optional<V> tryToGet(Map<K, V> map, K key) {
         return Optional.ofNullable(map.get(key));
     }

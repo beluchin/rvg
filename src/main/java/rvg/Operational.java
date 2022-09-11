@@ -3,18 +3,26 @@ package rvg;
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;
 
-import static rvg.Functional.path;
-import static rvg.Functional.supplierOfRandomLast;
+import java.util.UUID;
+
+import static rvg.Functional.supplierOfRandom;
 
 @UtilityClass
 public final class Operational {
     public static <T> T random(TypeToken<T> type, Config config) {
-        //noinspection unchecked
-        return (T) supplierOfRandomLast(path(type), config).get();
+        return supplierOfRandom(type, config).get();
+    }
+
+    public static boolean randomBoolean() {
+        return Math.random() > 0.5;
     }
 
     public static int randomInt() {
         return (int) (Math.random() * Integer.MAX_VALUE);
+    }
+
+    public static String randomString() {
+        return UUID.randomUUID().toString();
     }
 
 }

@@ -8,8 +8,8 @@ import lombok.val;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
+import static helpers.java.LambdaHelpers.sneakyThrows;
 import static helpers.java.ListHelpers.append;
 import static helpers.java.ListHelpers.last;
 import static helpers.java.ListHelpers.list;
@@ -71,17 +71,11 @@ final class Functional {
         val constructor = constructor(type);
         val args = args(type, constructor);
 
-        return () -> {
-            val argSuppliers = args.stream()
-                    .map(arg -> supplierOfRandomLastInPath(append(path, arg), config))
-                    .map(Supplier::get)
-                    .collect(Collectors.toList());
-            try {
-                return constructor.newInstance(argSuppliers.toArray());
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        };
+        return sneakyThrows(() -> constructor.newInstance(
+                args.stream()
+                        .map(arg -> supplierOfRandomLastInPath(append(path, arg), config))
+                        .map(Supplier::get)
+                        .toArray()));
     }
 
     private static Config withDefaults(Config orig) {

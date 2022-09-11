@@ -14,7 +14,6 @@ import static helpers.java.ListHelpers.append;
 import static helpers.java.ListHelpers.last;
 import static helpers.java.ListHelpers.list;
 
-@SuppressWarnings("rawtypes")
 @UtilityClass
 final class Functional {
     static ImmutableList<TypeToken<?>> args(TypeToken<?> enclosingType, Constructor<?> c) {
@@ -65,7 +64,7 @@ final class Functional {
                 .orElseGet(() -> supplierUsingConstructor(path, config));
     }
 
-    private static Supplier supplierUsingConstructor(
+    private static Supplier<?> supplierUsingConstructor(
             ImmutableList<TypeToken<?>> path,
             Config config) {
         val type = last(path);

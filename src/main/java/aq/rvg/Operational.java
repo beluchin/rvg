@@ -9,6 +9,10 @@ import static aq.rvg.Functional.supplierOfRandom;
 
 @UtilityClass
 public final class Operational {
+    public static <T> T random(TypeToken<T> type) {
+        return supplierOfRandom(type, Config.empty()).get();
+    }
+
     public static <T> T random(TypeToken<T> type, Config config) {
         return supplierOfRandom(type, config).get();
     }

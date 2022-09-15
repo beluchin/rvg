@@ -14,41 +14,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 final class RandomTest {
     @Test
     void _1_basic_type() {
-        assertThat(random(new TypeToken<Integer>() { }, Config.empty()))
-                .isNotZero();
-        assertThat(random(new TypeToken<String>() { }, Config.empty()))
-                .isNotNull();
+        assertThat(random(new TypeToken<Integer>() { })).isNotZero();
+        assertThat(random(new TypeToken<String>() { })).isNotNull();
     }
 
     @Test
     void _2_user_defined() {
-        val value = random(new TypeToken<WithoutTypeArgs>() { },
-                           Config.empty());
-
+        val value = random(new TypeToken<WithoutTypeArgs>() { });
         assertThat(value.i).isNotZero();
     }
 
     @Test
     void _3_user_defined_with_type_args() {
-        val value = random(new TypeToken<WithTypeArgs<Integer>>() { },
-                           Config.empty());
-
+        val value = random(new TypeToken<WithTypeArgs<Integer>>() { });
         assertThat(value.t).isNotZero();
     }
 
     @Test
     void _4_arbitrary_nesting() {
-        val value = random(new TypeToken<WithTypeArgs<WithTypeArgs<Integer>>>() { },
-                           Config.empty());
-
+        val value = random(new TypeToken<WithTypeArgs<WithTypeArgs<Integer>>>() { });
         assertThat(value.t.t).isNotZero();
     }
 
     @Test
     void _5_multiple_constructor_args() {
-        val value = random(new TypeToken<WithConstructorWithMultipleArgs<Integer>>() { },
-                           Config.empty());
-
+        val value = random(new TypeToken<WithConstructorWithMultipleArgs<Integer>>() { });
         assertThat(value.i).isNotZero();
         assertThat(value.t).isNotZero();
     }
@@ -86,7 +76,6 @@ final class RandomTest {
         void _1_special_constructor() {
             val value = random(new TypeToken<Either<Integer, String>>() { },
                                config);
-
             value.apply(i -> assertThat(i).isNotZero(),
                         s -> assertThat(s).isNotNull());
         }
@@ -95,7 +84,6 @@ final class RandomTest {
         void _2_special_constructor_nested() {
             val value = random(new TypeToken<WithTypeArgs<Either<Integer, String>>>() { },
                                config);
-
             value.t.apply(i -> assertThat(i).isNotZero(),
                           s -> assertThat(s).isNotNull());
         }

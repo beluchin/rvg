@@ -1,11 +1,11 @@
-package rvg;
+package aq.rvg;
 
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;
 
 import java.util.UUID;
 
-import static rvg.Functional.supplierOfRandom;
+import static aq.rvg.Functional.supplierOfRandom;
 
 @UtilityClass
 public final class Operational {

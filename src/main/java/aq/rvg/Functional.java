@@ -1,4 +1,4 @@
-package rvg;
+package aq.rvg;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
@@ -9,10 +9,10 @@ import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static helpers.java.LambdaHelpers.sneakyThrows;
-import static helpers.java.ListHelpers.append;
-import static helpers.java.ListHelpers.last;
-import static helpers.java.ListHelpers.list;
+import static aq.helpers.java.LambdaHelpers.sneakyThrows;
+import static aq.helpers.java.ListHelpers.append;
+import static aq.helpers.java.ListHelpers.last;
+import static aq.helpers.java.ListHelpers.list;
 
 @UtilityClass
 final class Functional {

@@ -1,15 +1,15 @@
-package rvg;
+package aq.rvg;
 
 import com.google.common.reflect.TypeToken;
-import helpers.java.either.Either;
+import aq.helpers.java.either.Either;
 import lombok.Value;
 import lombok.val;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static rvg.Functional.supplierOfRandom;
-import static rvg.Operational.randomBoolean;
+import static aq.rvg.Functional.supplierOfRandom;
+import static aq.rvg.Operational.randomBoolean;
 
 final class SupplierOfRandomTest {
     @Test

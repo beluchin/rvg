@@ -1,4 +1,4 @@
-package rvg;
+package aq.rvg;
 
 import com.google.common.reflect.TypeToken;
 import lombok.Value;
@@ -6,10 +6,10 @@ import lombok.val;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static helpers.java.ListHelpers.list;
+import static aq.helpers.java.ListHelpers.list;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static rvg.Functional.args;
+import static aq.rvg.Functional.args;
 
 class ArgsTest {
     @Disabled

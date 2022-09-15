@@ -1,8 +1,8 @@
-package rvg;
+package aq.rvg;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
-import helpers.java.tuple.Tuple;
+import aq.helpers.java.tuple.Tuple;
 import lombok.Value;
 
 import java.util.ArrayList;
@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-import static helpers.java.ListHelpers.list;
-import static helpers.java.tuple.Tuple.tuple;
-import static rvg.Operational.randomInt;
-import static rvg.Operational.randomString;
+import static aq.helpers.java.ListHelpers.list;
+import static aq.helpers.java.tuple.Tuple.tuple;
+import static aq.rvg.Operational.randomInt;
+import static aq.rvg.Operational.randomString;
 
 @Value
 public class Config {

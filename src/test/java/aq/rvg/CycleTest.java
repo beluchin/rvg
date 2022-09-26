@@ -1,16 +1,15 @@
 package aq.rvg;
 
 import com.google.common.reflect.TypeToken;
-import lombok.experimental.UtilityClass;
 import org.junit.jupiter.api.Test;
 
 import static aq.rvg.Operational.random;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-@UtilityClass
-final class CycleDetectionTest {
+final class CycleTest {
     @Test
     void depends_on_itself() {
+        //noinspection unused
         class C {
             C c;
         }

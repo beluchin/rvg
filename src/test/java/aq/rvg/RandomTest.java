@@ -1,6 +1,7 @@
 package aq.rvg;
 
 import aq.helpers.java.either.Either;
+import aq.rvg.config.Config;
 import com.google.common.reflect.TypeToken;
 import lombok.Value;
 import lombok.val;
@@ -63,12 +64,12 @@ final class RandomTest {
     class ConfigTest {
         private final Config config = Config.builder()
                 .for_(tt -> tt.getRawType().equals(Either.class),
-                      (tt, c) -> {
+                      (tt, config) -> {
                           val typeArg0 = tt.resolveType(Either.class.getTypeParameters()[0]);
                           val typeArg1 = tt.resolveType(Either.class.getTypeParameters()[1]);
                           return randomBoolean()
-                                  ? Either.first(random(typeArg0, c))
-                                  : Either.second(random(typeArg1, c));
+                                  ? Either.first(random(typeArg0, config))
+                                  : Either.second(random(typeArg1, config));
                       })
                 .build();
 

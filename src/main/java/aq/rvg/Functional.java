@@ -1,5 +1,6 @@
 package aq.rvg;
 
+import aq.rvg.config.Config;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;

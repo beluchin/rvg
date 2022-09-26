@@ -17,7 +17,8 @@ import static aq.helpers.java.ListHelpers.list;
 
 @UtilityClass
 final class Functional {
-    static ImmutableList<TypeToken<?>> args(TypeToken<?> enclosingType, Constructor<?> c) {
+    static ImmutableList<TypeToken<?>> args(TypeToken<?> enclosingType,
+                                            Constructor<?> c) {
         ensureNotLocalClass(enclosingType);
 
         val builder = ImmutableList.<TypeToken<?>>builder();
@@ -47,7 +48,8 @@ final class Functional {
     }
 
     private static Optional<Supplier<?>> optSupplierUsingOverrides(
-            ImmutableList<TypeToken<?>> path, Config config) {
+            ImmutableList<TypeToken<?>> path,
+            Config config) {
         val last = last(path);
         return config.many_PredicateAndRandomFunction.stream()
                 .filter(predicateAndRandomFunction -> predicateAndRandomFunction._1.test(last))
@@ -60,7 +62,8 @@ final class Functional {
     }
 
     private static Supplier<?> supplierOfRandomLastInPath(
-            ImmutableList<TypeToken<?>> path, Config config) {
+            ImmutableList<TypeToken<?>> path,
+            Config config) {
         return optSupplierUsingOverrides(path, config)
                 .orElseGet(() -> supplierUsingConstructor(path, config));
     }

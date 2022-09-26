@@ -65,7 +65,14 @@ final class Functional {
             ImmutableList<TypeToken<?>> path,
             Config config) {
         return optSupplierUsingOverrides(path, config)
-                .orElseGet(() -> supplierUsingConstructor(path, config));
+                .orElseGet(() -> {
+                    ensureNoCycle(path);
+                    return supplierUsingConstructor(path, config);
+                });
+    }
+
+    private static void ensureNoCycle(ImmutableList<TypeToken<?>> path) {
+        throw new UnsupportedOperationException();
     }
 
     private static Supplier<?> supplierUsingConstructor(

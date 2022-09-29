@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static aq.helpers.SetHelpers.set;
 import static aq.helpers.java.LambdaHelpers.sneakyThrows;
 import static aq.helpers.java.ListHelpers.append;
 import static aq.helpers.java.ListHelpers.last;
@@ -33,12 +34,25 @@ final class Functional {
         return (Supplier<T>) supplierOfRandomLastInPath(path(type), addDefaults(config));
     }
 
+    private static Config addDefaults(Config orig) {
+        return Config.builder()
+                .add(Config.DEFAULT)
+                .add(orig)
+                .build();
+    }
+
     private static Constructor<?> constructor(TypeToken<?> tt) {
         val constructors = tt.getRawType().getConstructors();
         if (0 == constructors.length) {
             throw new IllegalArgumentException("No public constructors found for " + tt);
         }
         return constructors[0];
+    }
+
+    private static void ensureNoCycle(ImmutableList<TypeToken<?>> path) {
+        if (set(path).size() != path.size()) {
+            throw new IllegalArgumentException("Cycle detected in " + path);
+        }
     }
 
     private static void ensureNotLocalClass(TypeToken<?> enclosingType) {
@@ -71,10 +85,6 @@ final class Functional {
                 });
     }
 
-    private static void ensureNoCycle(ImmutableList<TypeToken<?>> path) {
-        throw new UnsupportedOperationException();
-    }
-
     private static Supplier<?> supplierUsingConstructor(
             ImmutableList<TypeToken<?>> path,
             Config config) {
@@ -87,12 +97,5 @@ final class Functional {
                         .map(arg -> supplierOfRandomLastInPath(append(path, arg), config))
                         .map(Supplier::get)
                         .toArray()));
-    }
-
-    private static Config addDefaults(Config orig) {
-        return Config.builder()
-                .add(Config.DEFAULT)
-                .add(orig)
-                .build();
     }
 }

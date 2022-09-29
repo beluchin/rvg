@@ -30,7 +30,7 @@ final class Functional {
 
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type, Config config) {
         //noinspection unchecked
-        return (Supplier<T>) supplierOfRandomLastInPath(path(type), withDefaults(config));
+        return (Supplier<T>) supplierOfRandomLastInPath(path(type), addDefaults(config));
     }
 
     private static Constructor<?> constructor(TypeToken<?> tt) {
@@ -89,7 +89,7 @@ final class Functional {
                         .toArray()));
     }
 
-    private static Config withDefaults(Config orig) {
+    private static Config addDefaults(Config orig) {
         return Config.builder()
                 .add(Config.DEFAULT)
                 .add(orig)

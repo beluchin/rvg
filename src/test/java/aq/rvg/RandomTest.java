@@ -61,6 +61,20 @@ final class RandomTest {
     }
 
     @Nested
+    class BugsTest {
+        @Test
+        void overriden_random_int() {
+            val config = Config.builder()
+                    .for_(int.class, (tt, c) -> 42)
+                    .build();
+
+            val value = random(new TypeToken<Integer>() { }, config);
+
+            assertThat(value).isEqualTo(42);
+        }
+    }
+
+    @Nested
     class ConfigTest {
         private final Config config = Config.builder()
                 .for_(tt -> tt.getRawType().equals(Either.class),
@@ -87,6 +101,18 @@ final class RandomTest {
                                config);
             value.t.apply(i -> assertThat(i).isNotZero(),
                           s -> assertThat(s).isNotNull());
+        }
+
+        @Test
+        void _3_last_override_wins() {
+            val config = Config.builder()
+                    .for_(int.class, (tt, c) -> 0)
+                    .for_(int.class, (tt, c) -> 42)
+                    .build();
+
+            val value = random(new TypeToken<Integer>() { }, config);
+
+            assertThat(value).isEqualTo(42);
         }
     }
 }

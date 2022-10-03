@@ -36,8 +36,8 @@ final class Functional {
 
     private static Config addDefaults(Config orig) {
         return Config.builder()
-                .add(Config.DEFAULT)
                 .add(orig)
+                .add(Config.DEFAULT)
                 .build();
     }
 

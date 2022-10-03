@@ -65,7 +65,7 @@ final class RandomTest {
         @Test
         void overriden_random_int() {
             val config = Config.builder()
-                    .for_(int.class, (tt, c) -> 42)
+                    .for_(Integer.class, (tt, c) -> 42)
                     .build();
 
             val value = random(new TypeToken<Integer>() { }, config);

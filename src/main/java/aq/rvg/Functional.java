@@ -15,6 +15,7 @@ import static aq.helpers.java.LambdaHelpers.sneakyThrows;
 import static aq.helpers.java.ListHelpers.append;
 import static aq.helpers.java.ListHelpers.last;
 import static aq.helpers.java.ListHelpers.list;
+import static aq.rvg.config.Functional.reverse;
 
 @UtilityClass
 final class Functional {
@@ -31,7 +32,7 @@ final class Functional {
 
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type, Config config) {
         //noinspection unchecked
-        return (Supplier<T>) supplierOfRandomLastInPath(path(type), addDefaults(config));
+        return (Supplier<T>) supplierOfRandomLastInPath(path(type), addDefaults(reverse(config)));
     }
 
     private static Config addDefaults(Config orig) {

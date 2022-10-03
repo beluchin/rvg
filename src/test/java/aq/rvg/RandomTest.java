@@ -106,8 +106,8 @@ final class RandomTest {
         @Test
         void _3_last_override_wins() {
             val config = Config.builder()
-                    .for_(int.class, (tt, c) -> 0)
-                    .for_(int.class, (tt, c) -> 42)
+                    .for_(Integer.class, (tt, c) -> 0)
+                    .for_(Integer.class, (tt, c) -> 42)
                     .build();
 
             val value = random(new TypeToken<Integer>() { }, config);

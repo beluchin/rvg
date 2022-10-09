@@ -121,7 +121,9 @@ final class RandomTest {
                     .collectionSize(5)
                     .build();
 
-            assertThat(random(new TypeToken<ImmutableList<String>>() { }, config)).isEqualTo(5);
+            assertThat(random(new TypeToken<WithTypeArgs<ImmutableList<String>>>() { },
+                              config).t)
+                    .hasSize(5);
         }
     }
 }

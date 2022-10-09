@@ -1,5 +1,6 @@
 package aq.rvg;
 
+import aq.helpers.java.tuple.Tuple;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
@@ -8,6 +9,8 @@ import lombok.val;
 
 import java.lang.reflect.Constructor;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static aq.helpers.SetHelpers.set;
@@ -37,7 +40,8 @@ final class Functional {
     }
 
     static Config reverse(Config config) {
-        return new Config(config.collectionSize, config.many_PredicateAndRandomFunction.reverse());
+        return new Config(config.optCollectionSize,
+                          config.many_PredicateAndRandomFunction.reverse());
     }
 
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type, Config config) {
@@ -51,10 +55,13 @@ final class Functional {
     }
 
     private static Config addDefaults(Config orig) {
-        return Config.builder()
-                .add(orig)
-                .add(DEFAULT)
-                .build();
+        return new Config(orig.optCollectionSize,
+                          ImmutableList.<Tuple<
+                                          Predicate<TypeToken<?>>,
+                                          BiFunction<TypeToken<?>, Config, ?>>>builder()
+                                  .addAll(orig.many_PredicateAndRandomFunction)
+                                  .addAll(DEFAULT.many_PredicateAndRandomFunction)
+                                  .build());
     }
 
     private static Constructor<?> constructor(TypeToken<?> tt) {

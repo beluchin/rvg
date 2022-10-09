@@ -41,6 +41,6 @@ public final class Operational {
     }
 
     static int getCollectionSize(Config config) {
-        return oneOf(0, 2);
+        return config.optCollectionSize.orElse(randomInt(2, 6));
     }
 }

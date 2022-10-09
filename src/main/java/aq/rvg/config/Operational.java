@@ -6,7 +6,7 @@ import static aq.rvg.Operational.oneOf;
 
 @UtilityClass
 public final class Operational {
-    public static int randomListSize(Config config) {
+    public static int getCollectionSize(Config config) {
         return oneOf(0, 2);
     }
 }

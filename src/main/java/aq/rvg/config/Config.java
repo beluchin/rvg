@@ -18,7 +18,7 @@ import static aq.helpers.java.tuple.Tuple.tuple;
 import static aq.rvg.Operational.random;
 import static aq.rvg.Operational.randomInt;
 import static aq.rvg.Operational.randomString;
-import static aq.rvg.config.Operational.randomListSize;
+import static aq.rvg.config.Operational.getCollectionSize;
 
 @Value
 public class Config {
@@ -44,8 +44,7 @@ public class Config {
                       (tt, config) -> {
                           val typeArg = tt.resolveType(ImmutableList.class.getTypeParameters()[0]);
                           val builder = ImmutableList.builder();
-                          repeatedly(() -> random(typeArg, config),
-                                     randomListSize(config))
+                          repeatedly(() -> random(typeArg, config), getCollectionSize(config))
                                   .forEach(builder::add);
                           return builder.build();
                       })
@@ -53,8 +52,7 @@ public class Config {
                       (tt, config) -> {
                           val typeArg = tt.resolveType(ImmutableSet.class.getTypeParameters()[0]);
                           val builder = ImmutableSet.builder();
-                          repeatedly(() -> random(typeArg, config),
-                                     randomListSize(config))
+                          repeatedly(() -> random(typeArg, config), getCollectionSize(config))
                                   .forEach(builder::add);
                           return builder.build();
                       })

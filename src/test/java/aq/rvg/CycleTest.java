@@ -1,6 +1,5 @@
 package aq.rvg;
 
-import aq.rvg.config.Config;
 import com.google.common.reflect.TypeToken;
 import lombok.Value;
 import lombok.val;

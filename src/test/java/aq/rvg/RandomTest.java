@@ -1,7 +1,6 @@
 package aq.rvg;
 
 import aq.helpers.java.either.Either;
-import aq.rvg.config.Config;
 import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import lombok.Value;

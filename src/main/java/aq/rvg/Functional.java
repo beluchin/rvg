@@ -1,7 +1,7 @@
 package aq.rvg;
 
-import aq.rvg.config.Config;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -15,10 +15,16 @@ import static aq.helpers.java.LambdaHelpers.sneakyThrows;
 import static aq.helpers.java.ListHelpers.append;
 import static aq.helpers.java.ListHelpers.last;
 import static aq.helpers.java.ListHelpers.list;
-import static aq.rvg.config.Functional.reverse;
+import static aq.helpers.java.StreamHelpers.repeatedly;
+import static aq.rvg.Operational.getCollectionSize;
+import static aq.rvg.Operational.random;
+import static aq.rvg.Operational.randomInt;
+import static aq.rvg.Operational.randomString;
 
 @UtilityClass
 final class Functional {
+    static final Config DEFAULT = newDefaultConfig();
+
     static ImmutableList<TypeToken<?>> args(TypeToken<?> enclosingType,
                                             Constructor<?> c) {
         ensureNotLocalClass(enclosingType);
@@ -30,6 +36,10 @@ final class Functional {
         return builder.build();
     }
 
+    static Config reverse(Config config) {
+        return new Config(config.collectionSize, config.many_PredicateAndRandomFunction.reverse());
+    }
+
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type, Config config) {
         //noinspection unchecked
         return (Supplier<T>) supplierOfRandomLastInPath(path(type), addDefaults(reverse(config)));
@@ -37,13 +47,13 @@ final class Functional {
 
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type) {
         //noinspection unchecked
-        return (Supplier<T>) supplierOfRandomLastInPath(path(type), Config.DEFAULT);
+        return (Supplier<T>) supplierOfRandomLastInPath(path(type), DEFAULT);
     }
 
     private static Config addDefaults(Config orig) {
         return Config.builder()
                 .add(orig)
-                .add(Config.DEFAULT)
+                .add(DEFAULT)
                 .build();
     }
 
@@ -65,6 +75,33 @@ final class Functional {
         if (enclosingType.getRawType().isLocalClass()) {
             throw new UnsupportedOperationException("Local classes are not supported");
         }
+    }
+
+    private static Config newDefaultConfig() {
+        return Config.builder()
+                .for_(int.class, (tt, config) -> randomInt())
+                .for_(Integer.class, (tt, config) -> randomInt())
+                .for_(String.class, (tt, config) -> randomString())
+
+                // Guava collections
+                .for_(ImmutableList.class,
+                      (tt, config) -> {
+                          val typeArg = tt.resolveType(ImmutableList.class.getTypeParameters()[0]);
+                          val builder = ImmutableList.builder();
+                          repeatedly(() -> random(typeArg, config), getCollectionSize(config))
+                                  .forEach(builder::add);
+                          return builder.build();
+                      })
+                .for_(ImmutableSet.class,
+                      (tt, config) -> {
+                          val typeArg = tt.resolveType(ImmutableSet.class.getTypeParameters()[0]);
+                          val builder = ImmutableSet.builder();
+                          repeatedly(() -> random(typeArg, config), getCollectionSize(config))
+                                  .forEach(builder::add);
+                          return builder.build();
+                      })
+
+                .build();
     }
 
     private static Optional<Supplier<?>> optSupplierUsingOverrides(

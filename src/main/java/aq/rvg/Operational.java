@@ -1,6 +1,5 @@
 package aq.rvg;
 
-import aq.rvg.config.Config;
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;
 
@@ -39,5 +38,9 @@ public final class Operational {
 
     public static String randomString() {
         return UUID.randomUUID().toString();
+    }
+
+    static int getCollectionSize(Config config) {
+        return oneOf(0, 2);
     }
 }

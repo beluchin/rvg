@@ -35,6 +35,11 @@ final class Functional {
         return (Supplier<T>) supplierOfRandomLastInPath(path(type), addDefaults(reverse(config)));
     }
 
+    static <T> Supplier<T> supplierOfRandom(TypeToken<T> type) {
+        //noinspection unchecked
+        return (Supplier<T>) supplierOfRandomLastInPath(path(type), Config.DEFAULT);
+    }
+
     private static Config addDefaults(Config orig) {
         return Config.builder()
                 .add(orig)

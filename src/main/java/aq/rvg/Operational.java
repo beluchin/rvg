@@ -21,7 +21,7 @@ public final class Operational {
     }
 
     public static <T> T random(TypeToken<T> type) {
-        return supplierOfRandom(type, Config.empty()).get();
+        return supplierOfRandom(type).get();
     }
 
     public static boolean randomBoolean() {

@@ -4,6 +4,7 @@ import aq.helpers.java.tuple.Tuple;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
+import lombok.Builder;
 import lombok.Value;
 import lombok.val;
 
@@ -19,10 +20,14 @@ import static aq.rvg.Operational.random;
 import static aq.rvg.Operational.randomInt;
 import static aq.rvg.Operational.randomString;
 import static aq.rvg.config.Operational.getCollectionSize;
+import static com.google.common.base.Preconditions.checkArgument;
 
 @Value
+@Builder
 public class Config {
     public static final Config DEFAULT = newDefaultConfig();
+
+    public int collectionSize;
     public ImmutableList<Tuple<
             Predicate<TypeToken<?>>,
             BiFunction<TypeToken<?>, Config, ?>>> many_PredicateAndRandomFunction;
@@ -30,8 +35,6 @@ public class Config {
     public static Builder builder() {
         return new Builder();
     }
-
-    public static Config empty() { return new Config(list()); }
 
     private static Config newDefaultConfig() {
         return Config.builder()
@@ -65,6 +68,7 @@ public class Config {
                 Predicate<TypeToken<?>>,
                 BiFunction<TypeToken<?>, Config, ?>>> predicateAndRandomFunction
                 = new ArrayList<>();
+        private int collectionSize = randomInt(2, 5);
 
         public Builder add(Config c) {
             predicateAndRandomFunction.addAll(c.many_PredicateAndRandomFunction);
@@ -73,6 +77,12 @@ public class Config {
 
         public Config build() {
             return new Config(ImmutableList.copyOf(predicateAndRandomFunction));
+        }
+
+        public Builder collectionSize(int i) {
+            checkArgument(i > 0, "Collection size must be positive");
+            collectionSize = i;
+            return this;
         }
 
         public Builder for_(Class<?> c, BiFunction<TypeToken<?>, Config, ?> randomFunction) {

@@ -2,6 +2,7 @@ package aq.rvg;
 
 import aq.helpers.java.either.Either;
 import aq.rvg.config.Config;
+import com.google.common.collect.ImmutableList;
 import com.google.common.reflect.TypeToken;
 import lombok.Value;
 import lombok.val;
@@ -113,6 +114,15 @@ final class RandomTest {
             val value = random(new TypeToken<Integer>() { }, config);
 
             assertThat(value).isEqualTo(42);
+        }
+
+        @Test
+        void _4_collection_size() {
+            val config = Config.builder()
+                    .collectionSize(5)
+                    .build();
+
+            assertThat(random(new TypeToken<ImmutableList<String>>() { }, config)).isEqualTo(5);
         }
     }
 }

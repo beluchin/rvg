@@ -16,7 +16,6 @@ final class RandomTest {
     @Test
     void _1_basic_type() {
         assertThat(random(new TypeToken<Integer>() { })).isNotZero();
-        assertThat(random(new TypeToken<String>() { })).isNotNull();
     }
 
     @Test
@@ -42,6 +41,10 @@ final class RandomTest {
         val value = random(new TypeToken<WithConstructorWithMultipleArgs<Integer>>() { });
         assertThat(value.i).isNotZero();
         assertThat(value.t).isNotZero();
+    }
+
+    enum E {
+        A, B, C
     }
 
     @Value
@@ -125,5 +128,19 @@ final class RandomTest {
                               config).t)
                     .hasSize(5);
         }
+    }
+
+    @Nested
+    class OutOfTheBoxTest {
+        @Test
+        void enum_() {
+            assertThat(random(new TypeToken<E>() { })).isNotNull();
+        }
+
+        @Test
+        void string() {
+            assertThat(random(new TypeToken<String>() { })).isNotNull();
+        }
+
     }
 }

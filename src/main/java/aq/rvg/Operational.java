@@ -3,6 +3,7 @@ package aq.rvg;
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;
 
+import java.util.Random;
 import java.util.UUID;
 
 import static aq.rvg.Functional.supplierOfRandom;
@@ -11,8 +12,11 @@ import static com.google.common.base.Preconditions.checkArgument;
 @UtilityClass
 public final class Operational {
     @SafeVarargs
-    public static <T> T oneOf(T first, T... rest) {
-        return rest.length == 0 ? first : rest[randomInt(0, rest.length)];
+    public static <T> T oneOf(T... ts) {
+        if (ts.length == 0) {
+            throw new IllegalArgumentException("Must have at least one element");
+        }
+        return ts[randomInt(0, ts.length)];
     }
 
     public static <T> T random(TypeToken<T> type, Config config) {
@@ -25,6 +29,10 @@ public final class Operational {
 
     public static boolean randomBoolean() {
         return Math.random() > 0.5;
+    }
+
+    public static double randomDouble() {
+        return new Random().nextDouble();
     }
 
     public static int randomInt() {

@@ -20,7 +20,9 @@ import static aq.helpers.java.ListHelpers.last;
 import static aq.helpers.java.ListHelpers.list;
 import static aq.helpers.java.StreamHelpers.repeatedly;
 import static aq.rvg.Operational.getCollectionSize;
+import static aq.rvg.Operational.oneOf;
 import static aq.rvg.Operational.random;
+import static aq.rvg.Operational.randomDouble;
 import static aq.rvg.Operational.randomInt;
 import static aq.rvg.Operational.randomString;
 
@@ -86,9 +88,16 @@ final class Functional {
 
     private static Config newDefaultConfig() {
         return Config.builder()
+                .for_(String.class, (tt, config) -> randomString())
+
                 .for_(int.class, (tt, config) -> randomInt())
                 .for_(Integer.class, (tt, config) -> randomInt())
-                .for_(String.class, (tt, config) -> randomString())
+
+                .for_(double.class, (tt, config) -> randomDouble())
+                .for_(Double.class, (tt, config) -> randomDouble())
+
+                .for_(tt -> Enum.class.isAssignableFrom(tt.getRawType()),
+                      (tt, config) -> oneOf(tt.getRawType().getEnumConstants()))
 
                 // Guava collections
                 .for_(ImmutableList.class,

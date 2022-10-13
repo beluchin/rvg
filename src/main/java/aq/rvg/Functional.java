@@ -86,11 +86,15 @@ final class Functional {
         }
     }
 
+    private static BiFunction<TypeToken<?>, Config, Object> __(Supplier<?> s) {
+        return (tt, config) -> s.get();
+    }
+
     private static Config newDefaultConfig() {
         return Config.builder()
-                .for_(String.class, (tt, config) -> randomString())
+                .for_(String.class, __(Operational::randomString))
 
-                .for_(int.class, (tt, config) -> randomInt())
+                .for_(int.class, __(Operational::randomInt))
                 .for_(Integer.class, (tt, config) -> randomInt())
 
                 .for_(double.class, (tt, config) -> randomDouble())

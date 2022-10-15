@@ -54,7 +54,7 @@ public class Config {
             return this;
         }
 
-        public Builder for_(Class<?> c, BiFunction<TypeToken<?>, Config, ?> randomFunction) {
+        public <T> Builder for_(Class<T> c, BiFunction<TypeToken<?>, Config, T> randomFunction) {
             return for_(tt -> tt.getRawType().equals(c), randomFunction);
         }
 

@@ -22,9 +22,6 @@ import static aq.helpers.java.StreamHelpers.repeatedly;
 import static aq.rvg.Operational.getCollectionSize;
 import static aq.rvg.Operational.oneOf;
 import static aq.rvg.Operational.random;
-import static aq.rvg.Operational.randomDouble;
-import static aq.rvg.Operational.randomInt;
-import static aq.rvg.Operational.randomString;
 
 @UtilityClass
 final class Functional {
@@ -54,6 +51,10 @@ final class Functional {
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type) {
         //noinspection unchecked
         return (Supplier<T>) supplierOfRandomLastInPath(path(type), DEFAULT);
+    }
+
+    private static <T> BiFunction<TypeToken<?>, Config, T> __(Supplier<T> s) {
+        return (tt, config) -> s.get();
     }
 
     private static Config addDefaults(Config orig) {
@@ -86,19 +87,18 @@ final class Functional {
         }
     }
 
-    private static BiFunction<TypeToken<?>, Config, Object> __(Supplier<?> s) {
-        return (tt, config) -> s.get();
-    }
-
     private static Config newDefaultConfig() {
         return Config.builder()
                 .for_(String.class, __(Operational::randomString))
 
                 .for_(int.class, __(Operational::randomInt))
-                .for_(Integer.class, (tt, config) -> randomInt())
+                .for_(Integer.class, __(Operational::randomInt))
 
-                .for_(double.class, (tt, config) -> randomDouble())
-                .for_(Double.class, (tt, config) -> randomDouble())
+                .for_(double.class, __(Operational::randomDouble))
+                .for_(Double.class, __(Operational::randomDouble))
+
+                .for_(boolean.class, __(Operational::randomBoolean))
+                .for_(Boolean.class, __(Operational::randomBoolean))
 
                 .for_(tt -> Enum.class.isAssignableFrom(tt.getRawType()),
                       (tt, config) -> oneOf(tt.getRawType().getEnumConstants()))

@@ -60,7 +60,8 @@ final class RandomTest {
         return Stream.of(new TypeToken<AnEnum>() { },
                          new TypeToken<Optional<?>>() { },
                          new TypeToken<String>() { },
-                         new TypeToken<LocalDate>() {})
+                         new TypeToken<LocalDate>() {},
+                         new TypeToken<Object>() {})
                 .map(Arguments::arguments);
     }
 

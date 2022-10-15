@@ -11,6 +11,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -56,15 +57,15 @@ final class RandomTest {
     }
 
     private static Stream<Arguments> out_of_the_box() {
-        return Stream.of(new TypeToken<E>() { },
+        return Stream.of(new TypeToken<AnEnum>() { },
                          new TypeToken<Optional<?>>() { },
-                         new TypeToken<String>() { })
+                         new TypeToken<String>() { },
+                         new TypeToken<LocalDate>() {})
                 .map(Arguments::arguments);
     }
 
-    enum E {
-        A, B, C
-    }
+    @SuppressWarnings("unused")
+    enum AnEnum { A }
 
     @Value
     static class WithConstructorWithMultipleArgs<T> {

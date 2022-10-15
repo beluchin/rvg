@@ -8,6 +8,7 @@ import lombok.experimental.UtilityClass;
 import lombok.val;
 
 import java.lang.reflect.Constructor;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -101,6 +102,8 @@ final class Functional {
                 .for_(boolean.class, __(Operational::randomBoolean))
                 .for_(Boolean.class, __(Operational::randomBoolean))
 
+                .for_(LocalDate.class, __(Operational::randomLocalDate))
+
                 .for_(tt -> Enum.class.isAssignableFrom(tt.getRawType()),
                       (tt, config) -> oneOf(tt.getRawType().getEnumConstants()))
 
@@ -111,6 +114,7 @@ final class Functional {
                                                              ? random(argTT, config)
                                                              : null);
                       })
+
 
                 // Guava collections
                 .for_(ImmutableList.class,

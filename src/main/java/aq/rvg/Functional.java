@@ -22,6 +22,7 @@ import static aq.helpers.java.StreamHelpers.repeatedly;
 import static aq.rvg.Operational.getCollectionSize;
 import static aq.rvg.Operational.oneOf;
 import static aq.rvg.Operational.random;
+import static aq.rvg.Operational.randomBoolean;
 
 @UtilityClass
 final class Functional {
@@ -102,6 +103,14 @@ final class Functional {
 
                 .for_(tt -> Enum.class.isAssignableFrom(tt.getRawType()),
                       (tt, config) -> oneOf(tt.getRawType().getEnumConstants()))
+
+                .for_(Optional.class,
+                      (tt, config) -> {
+                          val type = tt.resolveType(Optional.class.getTypeParameters()[0]);
+                          return Optional.ofNullable(randomBoolean()
+                                                             ? random(type, config)
+                                                             : null);
+                      })
 
                 // Guava collections
                 .for_(ImmutableList.class,

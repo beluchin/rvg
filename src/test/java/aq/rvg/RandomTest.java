@@ -8,6 +8,8 @@ import lombok.val;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static aq.rvg.Operational.random;
 import static aq.rvg.Operational.randomBoolean;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -138,9 +140,13 @@ final class RandomTest {
         }
 
         @Test
+        void optional() {
+            assertThat(random(new TypeToken<Optional<String>>() { })).isNotNull();
+        }
+
+        @Test
         void string() {
             assertThat(random(new TypeToken<String>() { })).isNotNull();
         }
-
     }
 }

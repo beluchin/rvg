@@ -106,9 +106,9 @@ final class Functional {
 
                 .for_(Optional.class,
                       (tt, config) -> {
-                          val type = tt.resolveType(Optional.class.getTypeParameters()[0]);
+                          val argTT = tt.resolveType(Optional.class.getTypeParameters()[0]);
                           return Optional.ofNullable(randomBoolean()
-                                                             ? random(type, config)
+                                                             ? random(argTT, config)
                                                              : null);
                       })
 

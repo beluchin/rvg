@@ -7,8 +7,12 @@ import lombok.Value;
 import lombok.val;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static aq.rvg.Operational.random;
 import static aq.rvg.Operational.randomBoolean;
@@ -43,6 +47,19 @@ final class RandomTest {
         val value = random(new TypeToken<WithConstructorWithMultipleArgs<Integer>>() { });
         assertThat(value.i).isNotZero();
         assertThat(value.t).isNotZero();
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void out_of_the_box(TypeToken<?> tt) {
+        assertThat(random(tt)).isNotNull();
+    }
+
+    private static Stream<Arguments> out_of_the_box() {
+        return Stream.of(new TypeToken<E>() { },
+                         new TypeToken<Optional<?>>() { },
+                         new TypeToken<String>() { })
+                .map(Arguments::arguments);
     }
 
     enum E {
@@ -129,24 +146,6 @@ final class RandomTest {
             assertThat(random(new TypeToken<WithTypeArgs<ImmutableList<String>>>() { },
                               config).t)
                     .hasSize(5);
-        }
-    }
-
-    @Nested
-    class OutOfTheBoxTest {
-        @Test
-        void enum_() {
-            assertThat(random(new TypeToken<E>() { })).isNotNull();
-        }
-
-        @Test
-        void optional() {
-            assertThat(random(new TypeToken<Optional<String>>() { })).isNotNull();
-        }
-
-        @Test
-        void string() {
-            assertThat(random(new TypeToken<String>() { })).isNotNull();
         }
     }
 }

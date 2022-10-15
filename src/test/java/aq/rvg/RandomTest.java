@@ -65,8 +65,7 @@ final class RandomTest {
                 .map(Arguments::arguments);
     }
 
-    @SuppressWarnings("unused")
-    enum AnEnum { A }
+    enum AnEnum { @SuppressWarnings("unused") A }
 
     @Value
     static class WithConstructorWithMultipleArgs<T> {

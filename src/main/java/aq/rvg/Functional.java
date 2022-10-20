@@ -2,6 +2,7 @@ package aq.rvg;
 
 import aq.helpers.java.tuple.Tuple;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;
@@ -20,6 +21,7 @@ import static aq.helpers.java.ListHelpers.append;
 import static aq.helpers.java.ListHelpers.last;
 import static aq.helpers.java.ListHelpers.list;
 import static aq.helpers.java.StreamHelpers.repeatedly;
+import static aq.helpers.java.tuple.Tuple.tuple;
 import static aq.rvg.Operational.getCollectionSize;
 import static aq.rvg.Operational.oneOf;
 import static aq.rvg.Operational.random;
@@ -131,6 +133,17 @@ final class Functional {
                           val builder = ImmutableSet.builder();
                           repeatedly(() -> random(typeArg, config), getCollectionSize(config))
                                   .forEach(builder::add);
+                          return builder.build();
+                      })
+                .for_(ImmutableMap.class,
+                      (tt, config) -> {
+                          val keyArg = tt.resolveType(ImmutableMap.class.getTypeParameters()[0]);
+                          val valueArg = tt.resolveType(ImmutableMap.class.getTypeParameters()[1]);
+
+                          val builder = ImmutableMap.builder();
+                          repeatedly(() -> tuple(random(keyArg, config), random(valueArg, config)),
+                                     getCollectionSize(config))
+                                  .forEach(builder::put);
                           return builder.build();
                       })
 

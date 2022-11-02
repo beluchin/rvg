@@ -7,7 +7,6 @@ import lombok.val;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Random;
-import java.util.UUID;
 
 import static aq.rvg.Functional.supplierOfRandom;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -16,6 +15,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @UtilityClass
 public final class Operational {
     private static final LocalDate DATE_0 = LocalDate.of(1970, Month.JANUARY, 1);
+    private static final Random random = new Random();
 
     @SafeVarargs
     public static <T> T oneOf(T... ts) {
@@ -34,15 +34,15 @@ public final class Operational {
     }
 
     public static boolean randomBoolean() {
-        return Math.random() > 0.5;
+        return random.nextBoolean();
     }
 
     public static double randomDouble() {
-        return new Random().nextDouble();
+        return random.nextDouble();
     }
 
     public static int randomInt() {
-        return (int) (Math.random() * Integer.MAX_VALUE);
+        return random.nextInt();
     }
 
     public static int randomInt(int including, int excluding) {
@@ -64,7 +64,11 @@ public final class Operational {
     }
 
     public static String randomString() {
-        return UUID.randomUUID().toString();
+        return random.nextLong() + "";
+    }
+
+    public static void setSeed(long seed) {
+        random.setSeed(seed);
     }
 
     static int getCollectionSize(Config config) {

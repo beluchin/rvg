@@ -3,11 +3,11 @@ random value generator in Java
 
 ### TL;DR:
 ```java
-class SomeValue {
+class Foo {
   public final Integer i;
   public final String s;
   
-  public SomeValue(int i, String s) {...}
+  public Foo(int i, String s) {...}
   
   ...
 }
@@ -16,18 +16,18 @@ class SomeValue {
 import com.google.common.reflect.TypeToken;
 import static aq.rvg.Operational.random;
 
-SomeValue v = random(new TypeToken<SomeValue>() {});
+Foo v = random(new TypeToken<Foo>() {});
 assertThat(v.i).isNotNull();
 assertThat(v.s).isNotNull();
 ```
 
 ##### fully supports generics
 ```java
-class SomeValue {
+class Foo {
   public final Integer i;
   public final String s;
   
-  public SomeValue(int i, String s) {...}
+  public Foo(int i, String s) {...}
   
   ...
 }
@@ -42,18 +42,18 @@ class WithTypeArgs<T> {
 import com.google.common.reflect.TypeToken;
 import static aq.rvg.Operational.random;
 
-WithTypeArgs<SomeValue> v = random(new TypeToken<WithTypeArgs<SomeValue>>() {});
+WithTypeArgs<Foo> v = random(new TypeToken<WithTypeArgs<Foo>>() {});
 assertThat(v.t.i).isNotNull();
 assertThat(v.t.s).isNotNull();
 ```
 
 ##### can be configured 
 ```java
-class SomeValue {
+class Foo {
   public final Integer i;
   public final String s;
   
-  public SomeValue(int i, String s) {...}
+  public Foo(int i, String s) {...}
   
   ...
 }
@@ -74,7 +74,7 @@ Config config = Config.builder()
                           
                     .build();
 
-SomeValue v = random(new TypeToken<SomeValue>() {}, config);
+Foo v = random(new TypeToken<Foo>() {}, config);
 assertThat(v.i).isNotNull();
 assertThat(v.s).isEqualTo("hello world");
 ```

@@ -29,7 +29,9 @@ public final class Operational {
     }
 
     public static void setSeed(long seed) {
+        val random = getRandom();
         getRandom().setSeed(seed);
+        threadLocalRandomAndSeed.set(tuple(random, seed));
     }
 
     @SafeVarargs

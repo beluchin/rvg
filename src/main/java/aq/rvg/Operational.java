@@ -1,5 +1,6 @@
 package aq.rvg;
 
+import aq.helpers.java.tuple.Tuple;
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -8,14 +9,28 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Random;
 
+import static aq.helpers.java.tuple.Tuple.tuple;
 import static aq.rvg.Functional.supplierOfRandom;
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.lang.Math.abs;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @UtilityClass
 public final class Operational {
     private static final LocalDate DATE_0 = LocalDate.of(1970, Month.JANUARY, 1);
-    private static final Random random = new Random();
+    private static final ThreadLocal<Tuple<Random, Long>> threadLocalRandomAndSeed = ThreadLocal.withInitial(
+            () -> {
+                val seed = System.currentTimeMillis();
+                return tuple(new Random(seed), seed);
+            });
+
+    public static long getSeed() {
+        return threadLocalRandomAndSeed.get()._2;
+    }
+
+    public static void setSeed(long seed) {
+        getRandom().setSeed(seed);
+    }
 
     @SafeVarargs
     public static <T> T oneOf(T... ts) {
@@ -34,20 +49,20 @@ public final class Operational {
     }
 
     public static boolean randomBoolean() {
-        return random.nextBoolean();
+        return getRandom().nextBoolean();
     }
 
     public static double randomDouble() {
-        return random.nextDouble();
+        return getRandom().nextDouble();
     }
 
     public static int randomInt() {
-        return random.nextInt();
+        return getRandom().nextInt();
     }
 
     public static int randomInt(int including, int excluding) {
         checkArgument(including >= 0 && including < excluding);
-        return including + randomInt() % (excluding - including);
+        return including + abs(randomInt() % (excluding - including));
     }
 
     public static LocalDate randomLocalDate() {
@@ -64,14 +79,18 @@ public final class Operational {
     }
 
     public static String randomString() {
-        return random.nextLong() + "";
-    }
-
-    public static void setSeed(long seed) {
-        random.setSeed(seed);
+        return getRandom().nextLong() + "";
     }
 
     static int getCollectionSize(Config config) {
-        return config.optCollectionSize.orElse(randomInt(2, 6));
+        val s = config.optCollectionSize.orElse(randomInt(2, 6));
+        if (s <=0 ) {
+            throw new IllegalArgumentException("Collection size must be positive");
+        }
+        return s;
+    }
+
+    private static Random getRandom() {
+        return threadLocalRandomAndSeed.get()._1;
     }
 }

@@ -6,13 +6,16 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
 import lombok.val;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 import java.util.function.Predicate;
 
 import static aq.rvg.Operational.random;
+import static aq.rvg.Operational.setSeed;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(WhatsTheSeedExtension.class)
 final class GuavaCollectionsSupportTest {
     @Test
     void list() {

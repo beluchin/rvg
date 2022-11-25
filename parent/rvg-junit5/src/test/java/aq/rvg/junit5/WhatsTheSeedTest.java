@@ -1,6 +1,5 @@
-package aq.rvg;
+package aq.rvg.junit5;
 
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import static aq.rvg.Operational.randomInt;

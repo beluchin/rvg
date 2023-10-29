@@ -15,7 +15,7 @@ public class Either<T0, T1> {
         oneOf = new OneOf(index, value);
     }
 
-    public void apply(Consumer<? super T0> lFunc, Consumer<? super T1> rFunc) {
+    public void accept(Consumer<? super T0> lFunc, Consumer<? super T1> rFunc) {
         oneOf.apply(lFunc, rFunc);
     }
 

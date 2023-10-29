@@ -114,7 +114,7 @@ final class RandomTest {
         void _1_special_constructor() {
             val value = random(new TypeToken<Either<Integer, String>>() { },
                                config);
-            value.apply(i -> assertThat(i).isNotZero(),
+            value.accept(i -> assertThat(i).isNotZero(),
                         s -> assertThat(s).isNotNull());
         }
 
@@ -122,7 +122,7 @@ final class RandomTest {
         void _2_special_constructor_nested() {
             val value = random(new TypeToken<WithTypeArgs<Either<Integer, String>>>() { },
                                config);
-            value.t.apply(i -> assertThat(i).isNotZero(),
+            value.t.accept(i -> assertThat(i).isNotZero(),
                           s -> assertThat(s).isNotNull());
         }
 

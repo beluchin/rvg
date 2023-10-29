@@ -1,9 +1,9 @@
 package aq.rvg;
 
-import aq.helpers.java.tuple.Tuple;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Streams;
 import com.google.common.reflect.TypeToken;
 import lombok.experimental.UtilityClass;
 import lombok.val;
@@ -12,7 +12,6 @@ import java.lang.reflect.Constructor;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static aq.helpers.SetHelpers.set;
@@ -29,7 +28,7 @@ import static aq.rvg.Operational.randomBoolean;
 
 @UtilityClass
 final class Functional {
-    static final Config DEFAULT = newDefaultConfig();
+    static final Config DEFAULT_CONFIG = newDefaultConfig();
 
     static ImmutableList<TypeToken<?>> args(TypeToken<?> enclosingType,
                                             Constructor<?> c) {
@@ -42,33 +41,18 @@ final class Functional {
         return builder.build();
     }
 
-    static Config reverse(Config config) {
-        return new Config(config.optCollectionSize,
-                          config.many_PredicateAndRandomFunction.reverse());
-    }
-
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type, Config config) {
         //noinspection unchecked
-        return (Supplier<T>) supplierOfRandomLastInPath(path(type), addDefaults(reverse(config)));
+        return (Supplier<T>) supplierOfRandomLastInPath(path(type), config);
     }
 
     static <T> Supplier<T> supplierOfRandom(TypeToken<T> type) {
         //noinspection unchecked
-        return (Supplier<T>) supplierOfRandomLastInPath(path(type), DEFAULT);
+        return (Supplier<T>) supplierOfRandomLastInPath(path(type), DEFAULT_CONFIG);
     }
 
     private static <T> BiFunction<TypeToken<?>, Config, T> __(Supplier<T> s) {
         return (tt, config) -> s.get();
-    }
-
-    private static Config addDefaults(Config orig) {
-        return new Config(orig.optCollectionSize,
-                          ImmutableList.<Tuple<
-                                          Predicate<TypeToken<?>>,
-                                          BiFunction<TypeToken<?>, Config, ?>>>builder()
-                                  .addAll(orig.many_PredicateAndRandomFunction)
-                                  .addAll(DEFAULT.many_PredicateAndRandomFunction)
-                                  .build());
     }
 
     private static Constructor<?> constructor(TypeToken<?> tt) {
@@ -154,7 +138,8 @@ final class Functional {
             ImmutableList<TypeToken<?>> path,
             Config config) {
         val last = last(path);
-        return config.many_PredicateAndRandomFunction.stream()
+        return Streams.concat(config.many_PredicateAndRandomFunction.reverse().stream(),
+                              DEFAULT_CONFIG.many_PredicateAndRandomFunction.stream())
                 .filter(predicateAndRandomFunction -> predicateAndRandomFunction._1.test(last))
                 .<Supplier<?>>map(t -> () -> t._2.apply(last, config))
                 .findFirst();

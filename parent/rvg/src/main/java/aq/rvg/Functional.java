@@ -19,9 +19,6 @@ import static aq.helpers.java.LambdaHelpers.sneakyThrows;
 import static aq.helpers.java.ListHelpers.append;
 import static aq.helpers.java.ListHelpers.last;
 import static aq.helpers.java.ListHelpers.list;
-import static aq.helpers.java.StreamHelpers.repeatedly;
-import static aq.helpers.java.tuple.Tuple.tuple;
-import static aq.rvg.Operational.getCollectionSize;
 import static aq.rvg.Operational.oneOf;
 import static aq.rvg.Operational.random;
 import static aq.rvg.Operational.randomBoolean;
@@ -105,30 +102,30 @@ final class Functional {
                 // Guava collections
                 .for_(ImmutableList.class,
                       (tt, config) -> {
-                          val typeArg = tt.resolveType(ImmutableList.class.getTypeParameters()[0]);
-                          val builder = ImmutableList.builder();
-                          repeatedly(() -> random(typeArg, config), getCollectionSize(config))
-                                  .forEach(builder::add);
-                          return builder.build();
+                          if (!config.collMayBeEmpty || randomBoolean()) {
+                              val typeArg = tt.resolveType(ImmutableList.class.getTypeParameters()[0]);
+                              return ImmutableList.of(random(typeArg, config));
+                          }
+
+                          return ImmutableList.of();
                       })
                 .for_(ImmutableSet.class,
                       (tt, config) -> {
-                          val typeArg = tt.resolveType(ImmutableSet.class.getTypeParameters()[0]);
-                          val builder = ImmutableSet.builder();
-                          repeatedly(() -> random(typeArg, config), getCollectionSize(config))
-                                  .forEach(builder::add);
-                          return builder.build();
+                          if (!config.collMayBeEmpty || randomBoolean()) {
+                              val typeArg = tt.resolveType(ImmutableSet.class.getTypeParameters()[0]);
+                              return ImmutableSet.of(random(typeArg, config));
+                          }
+                          return ImmutableSet.of();
                       })
                 .for_(ImmutableMap.class,
                       (tt, config) -> {
-                          val keyArg = tt.resolveType(ImmutableMap.class.getTypeParameters()[0]);
-                          val valueArg = tt.resolveType(ImmutableMap.class.getTypeParameters()[1]);
-
-                          val builder = ImmutableMap.builder();
-                          repeatedly(() -> tuple(random(keyArg, config), random(valueArg, config)),
-                                     getCollectionSize(config))
-                                  .forEach(builder::put);
-                          return builder.build();
+                          if (!config.collMayBeEmpty || randomBoolean()) {
+                              val keyArg = tt.resolveType(ImmutableMap.class.getTypeParameters()[0]);
+                              val valueArg = tt.resolveType(ImmutableMap.class.getTypeParameters()[1]);
+                              return ImmutableMap.of(random(keyArg, config),
+                                                     random(valueArg, config));
+                          }
+                          return ImmutableMap.of();
                       })
 
                 .build();
@@ -173,3 +170,5 @@ final class Functional {
                         .toArray()));
     }
 }
+
+

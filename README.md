@@ -80,10 +80,10 @@ assertThat(v.s).isEqualTo("hello world");
 ```
 
 ### More details:
-##### size of collections is configurable
+##### collections may be forced to never be empty
 ```java
 Config c = Config.builder()
-               .collectionSize(5)
+               .collNeverEmpty()
                ...
                .build();
 ```

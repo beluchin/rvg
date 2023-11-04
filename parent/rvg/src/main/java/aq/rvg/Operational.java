@@ -84,14 +84,6 @@ public final class Operational {
         return getRandom().nextLong() + "";
     }
 
-    static int getCollectionSize(Config config) {
-        val s = config.optCollectionSize.orElse(randomInt(2, 6));
-        if (s <=0 ) {
-            throw new IllegalArgumentException("Collection size must be positive");
-        }
-        return s;
-    }
-
     private static Random getRandom() {
         return threadLocalRandomAndSeed.get()._1;
     }

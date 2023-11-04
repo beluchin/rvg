@@ -141,12 +141,12 @@ final class RandomTest {
         @Test
         void _4_collection_size() {
             val config = Config.builder()
-                    .collectionSize(5)
+                    .collNeverEmpty()
                     .build();
 
             assertThat(random(new TypeToken<WithTypeArgs<ImmutableList<String>>>() { },
                               config).t)
-                    .hasSize(5);
+                    .isNotEmpty();
         }
     }
 }

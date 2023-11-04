@@ -9,21 +9,18 @@ import lombok.Value;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.OptionalInt;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import static aq.helpers.java.tuple.Tuple.tuple;
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.ImmutableList.copyOf;
 import static lombok.AccessLevel.NONE;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 @Value
 @Builder
 @Getter(NONE)
 public class Config {
-    public OptionalInt optCollectionSize;
+    public boolean collMayBeEmpty; // default: true
     public ImmutableList<Tuple<
             Predicate<TypeToken<?>>,
             BiFunction<TypeToken<?>, Config, ?>>> many_PredicateAndRandomFunction;
@@ -37,7 +34,7 @@ public class Config {
                 Predicate<TypeToken<?>>,
                 BiFunction<TypeToken<?>, Config, ?>>> predicateAndRandomFunction
                 = new ArrayList<>();
-        private OptionalInt optCollectionSize = OptionalInt.empty();
+        private boolean collMayBeEmpty = true;
 
         public Builder add(Config c) {
             predicateAndRandomFunction.addAll(c.many_PredicateAndRandomFunction);
@@ -45,12 +42,16 @@ public class Config {
         }
 
         public Config build() {
-            return new Config(optCollectionSize, copyOf(predicateAndRandomFunction));
+            return new Config(collMayBeEmpty, copyOf(predicateAndRandomFunction));
         }
 
-        public Builder collectionSize(int i) {
-            checkArgument(i > 0, "Collection size must be positive");
-            optCollectionSize = OptionalInt.of(i);
+        public Builder collMayBeEmpty() {
+            collMayBeEmpty = true;
+            return this;
+        }
+
+        public Builder collNeverEmpty() {
+            collMayBeEmpty = false;
             return this;
         }
 

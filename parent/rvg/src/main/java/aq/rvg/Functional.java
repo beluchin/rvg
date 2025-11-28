@@ -53,7 +53,7 @@ final class Functional {
     }
 
     private static Constructor<?> constructor(TypeToken<?> tt) {
-        val constructors = tt.getRawType().getConstructors();
+        val constructors = tt.getRawType().getDeclaredConstructors();
         if (0 == constructors.length) {
             throw new IllegalArgumentException("No public constructors found for " + tt);
         }

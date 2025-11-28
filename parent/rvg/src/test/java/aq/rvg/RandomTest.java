@@ -27,8 +27,8 @@ final class RandomTest {
 
     @Test
     void _2_user_defined() {
-        val value = random(new TypeToken<WithoutTypeArgs>() { });
-        assertThat(value.i).isNotZero();
+        assertThat(random(new TypeToken<WithoutTypeArgs>() { }).i).isNotZero();
+        assertThat(random(new TypeToken<ARecord>() { }).i).isNotZero();
     }
 
     @Test
@@ -60,12 +60,14 @@ final class RandomTest {
         return Stream.of(new TypeToken<AnEnum>() { },
                          new TypeToken<Optional<?>>() { },
                          new TypeToken<String>() { },
-                         new TypeToken<LocalDate>() {},
-                         new TypeToken<Object>() {})
+                         new TypeToken<LocalDate>() { },
+                         new TypeToken<Object>() { })
                 .map(Arguments::arguments);
     }
 
-    enum AnEnum { @SuppressWarnings("unused") A }
+    enum AnEnum {@SuppressWarnings("unused") A}
+
+    record ARecord(int i) { }
 
     @Value
     static class WithConstructorWithMultipleArgs<T> {
@@ -115,7 +117,7 @@ final class RandomTest {
             val value = random(new TypeToken<Either<Integer, String>>() { },
                                config);
             value.accept(i -> assertThat(i).isNotZero(),
-                        s -> assertThat(s).isNotNull());
+                         s -> assertThat(s).isNotNull());
         }
 
         @Test
@@ -123,7 +125,7 @@ final class RandomTest {
             val value = random(new TypeToken<WithTypeArgs<Either<Integer, String>>>() { },
                                config);
             value.t.accept(i -> assertThat(i).isNotZero(),
-                          s -> assertThat(s).isNotNull());
+                           s -> assertThat(s).isNotNull());
         }
 
         @Test

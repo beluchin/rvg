@@ -13,11 +13,8 @@ final class CycleTest {
     @Test
     void _1_depends_on_itself() {
         //noinspection unused
-        class C {
-            C c;
-        }
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> random(new TypeToken<C>() { }));
+                .isThrownBy(() -> random(new TypeToken<WithCycle>() { }));
     }
 
     @Test
@@ -33,6 +30,11 @@ final class CycleTest {
                 .build();
 
         assertThat(random(new TypeToken<C1>() { }, config)).isNotNull();
+    }
+
+    @Value
+    private static class WithCycle {
+        WithCycle c;
     }
 
     @Value

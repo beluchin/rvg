@@ -27,8 +27,9 @@ final class RandomTest {
 
     @Test
     void _2_user_defined() {
-        val value = random(new TypeToken<WithoutTypeArgs>() { });
-        assertThat(value.i).isNotZero();
+        assertThat(random(new TypeToken<WithoutTypeArgs>() { }).i).isNotZero();
+
+        assertThat(random(new TypeToken<ARecord>() { }).i).isNotZero();
     }
 
     @Test
@@ -82,6 +83,8 @@ final class RandomTest {
     static class WithoutTypeArgs {
         int i;
     }
+
+    record ARecord(int i) {}
 
     @Nested
     class BugsTest {
